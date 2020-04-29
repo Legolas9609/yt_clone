@@ -35,7 +35,7 @@ export default {
 
     // film actions
     createNewFilm: (form) => instance.post('films',
-        form, {headers: authHeader()}),
+        form, { timeout: 90000, headers: authHeader()}),
     getAllFilms: () => instance.get('films'),
     removeFilm: (id) => instance.delete('films/' + id, {headers: authHeader()}),
     getFilmById: (id) => instance.get(`films/${id}`),

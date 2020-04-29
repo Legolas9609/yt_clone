@@ -138,7 +138,7 @@
                         this.$router.push(`${publicPath}films/${response.data.id}`)
                     })
                     .catch(error => {
-                        if (error.response.status !== 401) {
+                        if (error.response && error.response.status !== 401) {
                             if (error.response) {
                                 console.log(error.response);
                                 if (error.response.data.errors) {
@@ -153,6 +153,7 @@
                                 this.showError = true;
                             }
                         } else {
+                            console.log(error);
                             this.errorMessage = '';
                             this.showError = false;
                         }
