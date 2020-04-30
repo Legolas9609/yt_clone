@@ -12,7 +12,7 @@
         data() {
             return {
                 apiUrl: config.apiUrl,
-                notFoundFilmsThumbnail: 'https://www.atelierliving.nl/wp-content/themes/ctrln/assets/images/placeholder.png',
+                notFoundFilmsThumbnail: 'placeholder.png',
                 thumbnail: this.thumbnails[0],
                 loaded: false,
             }

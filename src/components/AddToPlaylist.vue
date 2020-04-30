@@ -1,7 +1,17 @@
 <template>
     <div class="pt-2 playlist-add-container" style="line-height: 1.5;"
          v-on:click="handleClickAddToPlaylistComponent($event)">
-        <p class="dropdown-item-my pl-4 pr-4">Save to...</p>
+        <b-row class="m-0 p-0">
+            <b-col cols="8" sm="8">
+                <p class="dropdown-item-my pl-2 pr-2">Save to...</p>
+            </b-col>
+            <b-col cols="4" sm="4" class="d-flex justify-content-end">
+                <md-button v-on:click="onClose($event)"
+                           class="m-0 p-0" style="width: 25px; height: 25px; border-radius: 20px; min-width: auto; outline: 0">
+                    <font-awesome-icon icon="times" />
+                </md-button>
+            </b-col>
+        </b-row>
         <b-dropdown-divider/>
 
         <b-col class="playlist-add-scroll" cols="12" sm="12"
@@ -11,23 +21,29 @@
                 <b-row :key="`_playlist-${index}`"
                        class="d-flex ml-2"
                        v-for="(_playlist, index) in playlists">
-
-                    <b-form-checkbox
-                            :checked="_playlist.films.includes(filmId)"
-                            class="mt-1 mb-1 d-flex"
-                            style="cursor: pointer"
-                            v-on:change="handleAddRemoveToPlaylist(_playlist, $event)"
-                    >
+                    <b-col class="m-0 p-0" cols="10" sm="10">
+                        <b-form-checkbox
+                                :checked="_playlist.films.includes(filmId)"
+                                class="mt-1 mb-1 d-flex"
+                                style="cursor: pointer"
+                                v-on:change="handleAddRemoveToPlaylist(_playlist, $event)">
+                        <span style="white-space: normal" v-line-clamp:20="1">
                         {{_playlist.title}}
+                        </span>
+                        </b-form-checkbox>
+                    </b-col>
+                    <b-col class="m-0 p-0 " cols="2" sm="2">
+                        <md-button class="align-self-center mr-3 d-flex align-items-center justify-content-center; "
+                                   style="width: 25px; height: 25px; border-radius: 20px; margin-left: auto">
 
-                    </b-form-checkbox>
-                    <md-ripple class="align-self-center mr-3 d-flex align-items-center justify-content-center"
-                               style="width: 25px; height: 25px; border-radius: 20px; margin-left: auto">
-                    <font-awesome-icon icon="globe"
-                                       v-if="_playlist.public" v-on:click="handleChangeIsPublic( _playlist.id, _playlist.public)"/>
-                    <font-awesome-icon  icon="lock"
-                                        v-if="_playlist.public === false" v-on:click="handleChangeIsPublic(_playlist.id, _playlist.public)"/>
-                    </md-ripple>
+                            <font-awesome-icon icon="globe"
+                                               v-if="_playlist.public"
+                                               v-on:click="handleChangeIsPublic( _playlist.id, _playlist.public)"/>
+                            <font-awesome-icon icon="lock"
+                                               v-if="_playlist.public === false"
+                                               v-on:click="handleChangeIsPublic(_playlist.id, _playlist.public)"/>
+                        </md-button>
+                    </b-col>
                 </b-row>
             </b-col>
 
@@ -51,10 +67,14 @@
         </b-form-invalid-feedback>
         <b-row class="m-0 mb-1 ml-4 mt-2 text-left justify-content-start">
             <b-button :disabled="isCreating" v-on:click="handleAddPlaylist">Create</b-button>
-            <b-spinner v-if="isCreating" class="ml-2"></b-spinner>
+            <b-spinner class="ml-2" v-if="isCreating"></b-spinner>
         </b-row>
 
-        <b-alert class="ml-4 mr-4 mt-4" show variant="danger" v-if="error">{{error}}</b-alert>
+        <b-alert class="ml-4 mr-4 mt-4" show v-if="error" variant="danger">
+            <span style="white-space: normal">
+                {{error}}
+            </span>
+        </b-alert>
     </div>
 </template>
 
@@ -98,6 +118,9 @@
             this.handleGetMyPlaylists();
         },
         methods: {
+            onClose () {
+                EventBus.$emit('closed');
+            },
             toast(title, message) {
                 this.$root.$bvToast.toast(message, {
                     title: title,
@@ -105,7 +128,7 @@
                     solid: true,
                     appendToast: true,
                     autoHideDelay: 1500,
-                    variant:  'secondary'
+                    variant: 'secondary'
                 })
             },
             handleGetMyPlaylists() {
@@ -144,12 +167,12 @@
                             this.error = "Cannont create playlist!";
                         }
                     }).finally(() => {
-                        this.isCreating = false;
-                        this.form = {
-                            title: null,
-                            public: true,
-                            films: [],
-                            removeFilms: false,
+                    this.isCreating = false;
+                    this.form = {
+                        title: null,
+                        public: true,
+                        films: [],
+                        removeFilms: false,
                     }
                 });
             },
@@ -189,12 +212,12 @@
                             console.log(error);
                         }
                     });
-        }
+            }
         }
     }
 </script>
 
-<style >
+<style>
 
     .custom-control-label {
         cursor: pointer;
@@ -204,4 +227,13 @@
         cursor: pointer;
     }
 
+    .my-ripple:hover {
+        opacity: .5;
+        background-color: currentColor;
+    }
+
+    .md-button {
+        min-width: auto !important;
+        outline: none !important;
+    }
 </style>

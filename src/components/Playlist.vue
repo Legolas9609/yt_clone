@@ -19,11 +19,11 @@
                        cols="2"
                        sm="2"
                        style="height: 24px; width: 24px" v-if="owner === playlist.authorID">
-                    <b-button class="p-0 d-flex justify-content-center align-items-center"
+                    <md-button class="p-0 d-flex justify-content-center align-items-center"
                               v-on:click="handleRemovePlaylist"
                               style="height: 24px; width: 24px; border-radius: 20px">
                         <font-awesome-icon icon="trash-alt"/>
-                    </b-button>
+                    </md-button>
                 </b-col>
             </b-row>
         </b-col>
@@ -61,21 +61,14 @@
                         </b-col>
                     </b-row>
                 </b-col>
-                <b-col class="playlist-remove-holder p-0 mr-2
-                              justify-content-end
-                              align-self-center
-                              align-items-center center-vertically"
+                <b-col class="playlist-remove-holder p-0 m-0 pr-2 d-flex
+                              justify-content-end align-items-center"
                        cols="2"
-                       sm="2"
-                       style="margin-left: auto; height: 20px; width: 20px !important; max-width: 20px !important; line-height: 0 !important"
-                       v-if="owner === playlist.authorID">
-                    <b-button class="p-0
-                              d-flex
-                              justify-content-center
-                              align-items-center" style="height: 20px; width: 20px; border-radius: 20px"
+                       sm="2" v-if="owner === playlist.authorID">
+                    <md-button class=" p-0 m-0" style="height: 20px; width: 20px; border-radius: 20px"
                               v-on:click="handleRemoveFilmFromPlaylist($event, film.id)">
                         <font-awesome-icon class="fa-sm" icon="trash-alt"/>
-                    </b-button>
+                    </md-button>
                 </b-col>
             </b-row>
             <b-row class="pb-3"></b-row>
@@ -121,7 +114,7 @@
                         this.films.forEach(_film => {
                             _film.thumbnails = [];
                             _film.thumbnails.push(`${this.apiUrl}films/${_film.id}/thumbnail/preview`);
-                            _film.thumbnails.push('https://www.atelierliving.nl/wp-content/themes/ctrln/assets/images/placeholder.png');
+                            _film.thumbnails.push('placeholder.png');
                             _film.thumbnail = _film.thumbnails[0];
                         });
                         const _playlist = this.playlist;

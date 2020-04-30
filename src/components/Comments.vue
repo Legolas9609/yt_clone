@@ -1,8 +1,8 @@
 <template>
     <b-col>
         <b-col class="p-0" cols="12" sm="12">
-            <b-row class="p-0 m-0"  cols="12" sm="12">
-                <b-col cols="9" sm="10" class="m-0 pl-0">
+            <b-row class="p-0 m-0" cols="12" sm="12">
+                <b-col class="m-0 pl-0" cols="9" sm="10">
                     <b-form-textarea
                             :state="textareaError && textareaError === null"
                             aria-describedby="input-comment-live-feedback"
@@ -20,7 +20,7 @@
                     <small class="text-justify" id="input-comment-live-feedback" style="color: red"
                            v-if="textareaError">{{ textareaError}}</small>
                 </b-col>
-                <b-col cols="3" sm="2" class="m-0 p-0">
+                <b-col class="m-0 p-0" cols="3" sm="2">
                     <b-button :disabled="isAdding" class="mt-3"
                               v-on:blur="textareaError = null"
                               v-on:click="handleAddComment"
@@ -45,10 +45,12 @@
                             variant="secondary">
 
                         <md-ripple>
-                            <b-dropdown-item class="m-nav-link" v-on:click="handleSort('creationDate')">By date</b-dropdown-item>
+                            <b-dropdown-item class="m-nav-link" v-on:click="handleSort('creationDate')">By date
+                            </b-dropdown-item>
                         </md-ripple>
                         <md-ripple>
-                            <b-dropdown-item class="m-nav-link" v-on:click="handleSort('username')">By author name</b-dropdown-item>
+                            <b-dropdown-item class="m-nav-link" v-on:click="handleSort('username')">By author name
+                            </b-dropdown-item>
                         </md-ripple>
                     </b-dropdown>
                 </div>
@@ -57,7 +59,7 @@
         <b-col :key="`_comment-${index}`" class="p-0 mt-4 comment-holder"
                cols="12"
                v-for="(_comment, index) in content.comments">
-            <b-row style="margin: 0">
+            <b-row class="w-100" style="margin: 0">
 
                 <p class="m-0 font-weight-bold">
                     <small class="m-0 font-weight-bold">{{_comment.authorUsername}}</small>
@@ -66,22 +68,9 @@
                     <small class="m-0">&ensp;{{_comment.createdDate | addSpace}}</small>
                 </p>
 
-                <b-dropdown no-caret  style="margin-left: auto" right
-                            variant="link">
-                    <template style="width: 25px; height: 25px" v-slot:button-content>
-                        <md-ripple class="d-flex justify-content-center align-items-center"
-                                   style="width: 25px; height: 25px; border-radius: 20px; margin-left: auto">
-                            <font-awesome-icon :class="isMobile ? ' comment-dropdown-holder-mobile' : 'comment-dropdown-holder'"
-                                               icon="ellipsis-v" v-if="isLoggedIn && loggedInUser === _comment.authorID"/>
-                        </md-ripple>
-                    </template>
-                    <md-ripple>
-                        <b-dropdown-item class="m-nav-link" v-on:click="handleDeleteComment(_comment.id)">
-                            Delete
-                        </b-dropdown-item>
-                    </md-ripple>
+                <CommentDeleteButton v-bind:comment-id="_comment.id"
+                                     v-if="content.isLoggedIn && loggedInUser === _comment.authorID"/>
 
-                </b-dropdown>
             </b-row>
             <p class="text-justify">
                 <small>{{_comment.text}}</small>
@@ -94,21 +83,24 @@
 <script>
     import service from "../service";
     import {displayDate, getUserId, isMobile} from "../helpers";
+    import CommentDeleteButton from "./CommentDeleteButton";
+    import EventBus from "../event-bus";
 
     export default {
         name: "Comments",
+        components: {CommentDeleteButton},
         props: {
             comments: Array,
             filmId: String,
             isLoggedIn: Boolean,
         },
         watch: {
-            // whenever question changes, this function will run
-            filmId() {
-
+            isLoggedIn(isLoggedIn) {
+                this.content.isLoggedIn = isLoggedIn;
             },
             comments(newComments) {
-                this.content.comments = newComments;
+                console.log(newComments)
+                // this.content.comments = newComments;
             }
         },
         data() {
@@ -119,15 +111,37 @@
                 dir: 1,
                 content: {
                     comments: this.comments,
+                    isLoggedIn: this.isLoggedIn,
                 },
                 loggedInUser: null,
                 isMobile: isMobile(),
+                isActive: false,
             }
         },
+        beforeDestroy() {
+            EventBus.$off('deleted_comment');
+        },
         mounted() {
+            EventBus.$on('deleted_comment', (id) => {
+                this.handleDeleteComment(id)
+            });
+
             this.loggedInUser = getUserId();
         },
         methods: {
+            handleScroll() {
+                this.isActive = false;
+            },
+            handleShow() {
+                console.log('show');
+                window.addEventListener('scroll', this.handleScroll);
+                this.isActive = true;
+            },
+            handleHide() {
+                console.log('hide');
+                window.removeEventListener('scroll', this.handleScroll);
+                this.isActive = false;
+            },
             handleAddComment() {
                 this.isAdding = true;
 
@@ -163,6 +177,7 @@
                     .then(response => {
                         console.log(response);
                         this.content.comments = this.content.comments.filter(_comment => _comment.id !== id);
+                        this.$emit('deleted', this.content.comments)
                     })
                     .catch(error => {
                         console.log(error);
@@ -189,7 +204,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     .textarea-no-scrollbars {
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -216,5 +231,32 @@
     .comment-holder:hover .comment-dropdown-holder:hover {
         opacity: 1;
         cursor: pointer;
+    }
+
+    .md-list-item-content {
+        min-height: 48px;
+        padding: 4px 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: padding .4s cubic-bezier(.25, .8, .25, 1);
+        will-change: padding;
+    }
+
+    /*nadpisanie stylow md-menu*/
+
+    .md-menu-content.md-menu-content-leave-active {
+        transition: opacity .1s cubic-bezier(.4, 0, .2, 1);
+        opacity: 0
+    }
+
+    .md-menu-content-container .md-list {
+        transition: opacity .1s cubic-bezier(.25, .8, .25, 1);
+        will-change: opacity;
+    }
+
+    .md-menu-content.md-menu-content-enter.md-menu-content-bottom-end {
+        transform-origin: top right;
+        transform: translate3d(0, 0px, 0) scaleY(1)
     }
 </style>

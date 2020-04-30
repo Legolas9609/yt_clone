@@ -57,7 +57,7 @@
                 apiUrl: config.apiUrl,
                 isLoggedIn: false,
                 isLoading: true,
-                notFoundFilmsThumbnail: 'https://www.atelierliving.nl/wp-content/themes/ctrln/assets/images/placeholder.png'
+                notFoundFilmsThumbnail: 'placeholder.png'
             }
         },
         methods: {
@@ -101,7 +101,7 @@
                         _playlist.films.forEach(_film => {
                            _playlist.thumbnails.push(`${this.apiUrl}films/${_film}/thumbnail/preview`);
                         });
-                        _playlist.thumbnails.push('https://www.atelierliving.nl/wp-content/themes/ctrln/assets/images/placeholder.png');
+                        _playlist.thumbnails.push('placeholder.png');
                         _playlist.thumbnail = _playlist.thumbnails[0];
                     });
                     this.playlists = this.playlists.filter(_playlist => _playlist.films.length > 0);

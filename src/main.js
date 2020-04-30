@@ -3,8 +3,9 @@ import VueYoutube from 'vue-youtube'
 import VueRouter from 'vue-router'
 import VeeValidate from 'vee-validate'
 import lineClamp from 'vue-line-clamp'
+import ReadMore from 'vue-read-more';
 
-import { MdRipple, MdAvatar, MdButton, MdMenu } from 'vue-material/dist/components'
+import { MdRipple, MdAvatar, MdButton, MdMenu, MdList } from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import './md_default.css'
 
@@ -24,7 +25,8 @@ import {
     faLock,
     faLockOpen,
     faGlobe,
-    faTrashAlt
+    faTrashAlt,
+    faWindowClose
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 
@@ -48,11 +50,7 @@ library.add(faLock);
 library.add(faLockOpen);
 library.add(faGlobe);
 library.add(faTrashAlt);
-
-import Popper from 'popper.js';
-
-// see: https://github.com/twbs/bootstrap/issues/23590
-Popper.Defaults.modifiers.computeStyle.gpuAcceleration = !(window.devicePixelRatio < 1.5 && /Win/.test(navigator.platform));
+library.add(faWindowClose);
 
 Vue.use(Autocomplete);
 Vue.config.productionTip = false;
@@ -71,12 +69,14 @@ Vue.use(VeeValidate, {
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(VueRouter);
+Vue.use(ReadMore);
 
 Vue.use(VueYoutube);
 Vue.use(MdRipple);
 Vue.use(MdAvatar);
 Vue.use(MdButton);
 Vue.use(MdMenu);
+Vue.use(MdList);
 
 Vue.use(lineClamp, {
     // plugin options

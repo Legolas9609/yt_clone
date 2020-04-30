@@ -46,14 +46,16 @@
                         <b-col class="text-justify" sm="12">
 
                             <span>
-                                {{this.film.description}}
+                                 <read-more more-str="read more" :text="film.description" link="#" less-str="read less" :max-chars="100"></read-more>
+
                             </span>
                         </b-col>
                     </b-row>
                 </b-col>
 
                 <b-col class="p-0 mt-4 d-none d-md-block">
-                    <Comments v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
+                    <Comments  @deleted="handleDeleteComment"
+                               v-if="width >= 768" v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
                 </b-col>
             </b-col>
             <b-col class="p-0 mt-4 " cols="12" md="4">
@@ -63,7 +65,8 @@
             </b-col>
             <!--Wyswietlanie komentarzy od filmami jesli mala szerokosc-->
             <b-col class="p-0 mt-4 d-block d-md-none" cols="12">
-                <Comments v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
+                <Comments @deleted="handleDeleteComment"
+                        v-if="width < 768" v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
             </b-col>
 
         </b-row>
@@ -98,14 +101,21 @@
                     disliked: false,
                 },
                 filmVideoHeight: 0,
+                width: window.screen.width,
                 isLoggedIn: false,
             }
         },
         methods: {
-
+            handleDeleteComment(commentsAfterDelete) {
+                this.comments = commentsAfterDelete;
+            },
             loadFilm(id) {
                 service.updateFilmMetaViews(id, {viewed: true})
                     .then(response => {
+                        this.userMeta = {
+                            disliked: false,
+                            liked: false
+                        };
                         this.film = response.data;
                         this.films[this.films.findIndex(el => el.id === this.film.id)] = this.film;
                         this.checkUserLikes();
@@ -170,14 +180,17 @@
             },
             handleResize() {
                 this.filmVideoHeight = this.$refs.filmVideoRef.clientHeight;
+                const width  = window.innerWidth || document.documentElement.clientWidth ||
+                    document.body.clientWidth;
+                this.width = width;
             }
 
         },
         beforeRouteUpdate(to, from, next) {
+
             this.loadFilm(to.params.id);
             this.listId = to.query.list;
             this.filmId = to.params.id;
-            console.log(this.listId)
             next()
         },
         updated() {
@@ -189,7 +202,13 @@
             window.removeEventListener('resize', this.handleResize)
         },
         async mounted() {
-            console.log('mounted film ')
+
+            const width  = window.innerWidth || document.documentElement.clientWidth ||
+            document.body.clientWidth;
+            this.width = width;
+
+            console.log('mounted film ');
+
             window.addEventListener('resize', this.handleResize);
             EventBus.$on('logged', (arg) => {
                 if (arg === 'in') {

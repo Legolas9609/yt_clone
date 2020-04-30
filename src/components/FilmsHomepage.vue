@@ -11,7 +11,7 @@
                 </div>
                 <b-row class="m-0 mt-2">
                     <b-col cols="10" sm="10" class="title p-0">
-                        <span class="pb-1" v-line-clamp:20="2">{{film.title}}</span>
+                        <span v-line-clamp:20="2">{{film.title}}</span>
 
                     </b-col>
                     <b-col class="p-0 d-flex justify-content-end"

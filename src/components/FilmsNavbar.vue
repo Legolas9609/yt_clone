@@ -3,8 +3,8 @@
         <b-col :key="`_film-${index}`"
                class="film-preview-holder p-0 mb-4 m-container"
                v-for="(_film, index) in films.filter(_f => _f.id !== film.id)">
-            <b-row @click="handleFilmChooseNavbar($event, _film.id)" class="m-0">
-                <b-col class="p-0" cols="11" sm="11" style="padding-top: 4px !important;">
+            <b-row  class="m-0">
+                <b-col class="p-0" cols="11" sm="11" style="padding-top: 4px !important;" @click="handleFilmChooseNavbar($event, _film.id)">
                     <b-row class="p-0 m-0">
                     <b-col cols="7" sm="7" class="p-0 pr-4">
                         <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
@@ -32,7 +32,7 @@
                     </b-col>
                     </b-row>
                 </b-col>
-                <b-col class="p-0 pr-2 d-flex justify-content-end "
+                <b-col class="p-0 d-flex justify-content-end "
                        cols="1"
                        sm="1"
                        style="line-height: 0 !important;">

@@ -36,11 +36,11 @@
                                cols="6"
                                sm="6"
                                style="margin-left: auto; height: 25px; width: 25px !important; line-height: 0 !important">
-
-                            <md-ripple class="d-flex justify-content-center align-items-center"
+                            <md-button class="m-0 p-0"
                                        style="width: 25px; height: 25px; border-radius: 20px">
+
                                 <font-awesome-icon class="fa-sm" icon="trash-alt"/>
-                            </md-ripple>
+                            </md-button>
                         </b-col>
                         </b-row>
 
@@ -80,19 +80,13 @@
                     </b-col>
                     <b-col class="p-0 m-0 text-justify" cols="2" sm="2">
                         <b-col :class="isMobile ? 'playlist-remove-holder-mobile' : 'playlist-remove-holder'"
-                               class="p-0 mr-2
-                              justify-content-end d-flex justify-content-end
-                              align-self-center
-                              align-items-center center-vertically"
-                               cols="2"
-                               sm="2"
-                              v-on:click="handleRemovePlaylist(playlist.id)"
-                               style="margin-left: auto; height: 25px; width: 25px !important; max-width: 20px !important; line-height: 0 !important">
-
-                            <md-ripple class="d-flex justify-content-center align-items-center"
+                                class="m-0 p-0"
+                              v-on:click="handleRemovePlaylist(playlist.id)">
+                            <md-button class="m-0 p-0"
                                        style="width: 25px; height: 25px; border-radius: 20px">
+
                                 <font-awesome-icon class="fa-sm" icon="trash-alt"/>
-                            </md-ripple>
+                            </md-button>
                         </b-col>
                     </b-col>
                 </b-row>
@@ -127,7 +121,7 @@
                 isLoggedIn: false,
                 isLoading: true,
                 isMobile: isMobile(),
-                notFoundFilmsThumbnail: 'https://www.atelierliving.nl/wp-content/themes/ctrln/assets/images/placeholder.png'
+                notFoundFilmsThumbnail: 'placeholder.png'
             }
         },
         beforeDestroy(){
@@ -217,17 +211,14 @@
             handleRemoveFilm(id) {
                 service.removeFilm(id)
                     .then(() => {
-                        console.log(this.playlists);
                         this.playlists.forEach(_playlist => {
                             const _index = _playlist.films.indexOf(id);
                             if(_index > 0) {
-                           _playlist.films.splice(_index, 1);
-                           _playlist.thumbnails.splice(_index, 1);
-                           _playlist.thumbnails.forEach(_thumbnail => _thumbnail +  "?" + Date.now());
-                        console.log(_playlist.films);
+                               _playlist.films.splice(_index, 1);
+                               _playlist.thumbnails.splice(_index, 1);
+                               _playlist.thumbnails.forEach(_thumbnail => _thumbnail +  "?" + Date.now());
                             }
                         });
-                        console.log(this.playlists);
                         this.playlists = this.playlists.filter(_playlist => _playlist.id !== null);
                         this.films = this.films.filter(_film => _film.id !== id);
                     })
