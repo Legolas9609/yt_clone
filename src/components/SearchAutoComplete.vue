@@ -1,13 +1,13 @@
 <template>
     <div :style="width" class="v-autocomplete" style="margin: 0;">
-        <input @input="loadMoreResults($event)"
+        <input @input="onChange($event)"
+               :value='search'
                @keydown.down="onArrowDown"
                @keydown.enter="onEnter"
                @keydown.up="onArrowUp"
                class="v-autocomplete-input w-100"
                placeholder="Search..."
                type="text"
-               v-model="search"
         />
         <ul class="v-autocomplete-list"
             id="autocomplete-results"
@@ -69,10 +69,11 @@
             document.removeEventListener('click', this.handleClickOutside)
         },
         methods: {
-            onChange() {
-                this.isOpen = true;
-                console.log('changed');
+            onChange(event) {
+                console.log('changedd');
                 // this.$emit('input', this); // .search
+                this.search = event.target.value;
+
                 this.loadMoreResults(this.search)
             },
             setResult(result) {
@@ -121,13 +122,11 @@
                 this.search = ''
 
             },
-            loadMoreResults(event) {
+            loadMoreResults(value) {
                 // this.isLoading = true;
-                if (this.$el.contains(event.target)) {
 
-                    const value = event.target.value;
                     console.log(value);
-                    console.log('Value');
+                    console.log('Valuec');
 
                     if (value.length > 1) {
                         backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
@@ -148,7 +147,6 @@
                         this.isLoading = false;
                         this.results = []
                     }
-                }
 
             },
         }
