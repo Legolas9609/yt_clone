@@ -1,5 +1,5 @@
 <template>
-    <div class="v-autocomplete" style="margin: 0;" :style="width">
+    <div :style="width" class="v-autocomplete" style="margin: 0;">
         <input @input="loadMoreResults($event)"
                @keydown.down="onArrowDown"
                @keydown.enter="onEnter"
@@ -20,13 +20,13 @@
             >
                 Loading results...
             </li>
-            <li     :class="{ 'v-autocomplete-list-item-active': i === arrowCounter }"
-                    :key="i"
-                    @click="setResult(result)"
-                    @mouseover="arrowCounter = i"
-                    class="v-autocomplete-list-item"
-                    v-else
-                    v-for="(result, i) in results"
+            <li :class="{ 'v-autocomplete-list-item-active': i === arrowCounter }"
+                :key="i"
+                @click="setResult(result)"
+                @mouseover="arrowCounter = i"
+                class="v-autocomplete-list-item"
+                v-else
+                v-for="(result, i) in results"
             >
                 <md-avatar
                         class="mr-3" variant="primary">
@@ -123,29 +123,33 @@
             },
             loadMoreResults(event) {
                 // this.isLoading = true;
-                const value = event.target.value;
-                console.log(value);
-                console.log('Value');
+                if (this.$el.contains(event.target)) {
 
-                if (value.length > 1) {
-                    backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
-                        .then(response => {
-                            this.isLoading = false;
-                            console.log('response.data)');
-                            console.log(response.data);
-                            this.results = response.data;
-                            this.isOpen = this.results.length > 0;
-                        })
-                        .catch(error => {
-                            console.log(error);
-                            this.error = "Failed to load films"
-                        })
-                        .finally(() => this.isLoading = false)
-                } else {
-                    this.isOpen = false;
-                    this.isLoading = false;
-                    this.results = []
+                    const value = event.target.value;
+                    console.log(value);
+                    console.log('Value');
+
+                    if (value.length > 1) {
+                        backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
+                            .then(response => {
+                                this.isLoading = false;
+                                console.log('response.data)');
+                                console.log(response.data);
+                                this.results = response.data;
+                                this.isOpen = this.results.length > 0;
+                            })
+                            .catch(error => {
+                                console.log(error);
+                                this.error = "Failed to load films"
+                            })
+                            .finally(() => this.isLoading = false)
+                    } else {
+                        this.isOpen = false;
+                        this.isLoading = false;
+                        this.results = []
+                    }
                 }
+
             },
         }
     }
