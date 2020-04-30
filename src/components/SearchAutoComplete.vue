@@ -70,7 +70,9 @@
         },
         methods: {
             onChange() {
-                this.$emit('input', this); // .search
+                this.isOpen = true;
+                console.log('changed');
+                // this.$emit('input', this); // .search
                 this.loadMoreResults(this.search)
             },
             setResult(result) {
@@ -98,6 +100,7 @@
                 this.handleRedirect()
             },
             handleClickOutside(evt) {
+                console.log('outside');
                 if (!this.$el.contains(evt.target)) {
                     this.isOpen = false;
                     this.arrowCounter = -1;
