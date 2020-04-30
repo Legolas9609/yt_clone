@@ -70,10 +70,7 @@
         },
         methods: {
             onChange(event) {
-                console.log('changedd');
-                // this.$emit('input', this); // .search
                 this.search = event.target.value;
-
                 this.loadMoreResults(this.search)
             },
             setResult(result) {
@@ -95,7 +92,6 @@
                 }
             },
             onEnter() {
-                //this.search = this.results[this.arrowCounter];
                 this.isOpen = false;
                 this.item = this.results[this.arrowCounter];
                 this.results = [];
@@ -103,7 +99,6 @@
                 this.handleRedirect()
             },
             handleClickOutside(evt) {
-                console.log('outside');
                 if (!this.$el.contains(evt.target)) {
                     this.isOpen = false;
                     this.arrowCounter = -1;
@@ -123,11 +118,6 @@
 
             },
             loadMoreResults(value) {
-                // this.isLoading = true;
-
-                    console.log(value);
-                    console.log('Valuec');
-
                     if (value.length > 1) {
                         backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
                             .then(response => {
