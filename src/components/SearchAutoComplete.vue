@@ -1,6 +1,6 @@
 <template>
     <div class="v-autocomplete" style="margin: 0;" :style="width">
-        <input @input="onChange"
+        <input @input="loadMoreResults($event)"
                @keydown.down="onArrowDown"
                @keydown.enter="onEnter"
                @keydown.up="onArrowUp"
@@ -119,8 +119,9 @@
                 this.search = ''
 
             },
-            loadMoreResults(value) {
+            loadMoreResults(event) {
                 // this.isLoading = true;
+                const value = event.target.value;
                 console.log(value);
                 console.log('Value');
 
