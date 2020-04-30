@@ -76,12 +76,12 @@
                 this.loadMoreResults(this.search)
             },
             setResult(result) {
+                this.isOpen = false;
                 if (result.title) {
                     this.item = result;
                     this.handleRedirect()
                 } else
                     this.search = result;
-                this.isOpen = false;
             },
             onArrowDown() {
                 if (this.arrowCounter < this.results.length) {
@@ -95,7 +95,9 @@
             },
             onEnter() {
                 //this.search = this.results[this.arrowCounter];
+                this.isOpen = false;
                 this.item = this.results[this.arrowCounter];
+                this.results = [];
                 this.arrowCounter = -1;
                 this.handleRedirect()
             },
