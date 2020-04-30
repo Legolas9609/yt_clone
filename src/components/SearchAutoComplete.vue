@@ -121,10 +121,15 @@
             },
             loadMoreResults(value) {
                 // this.isLoading = true;
+                console.log(value);
+                console.log('Value');
+
                 if (value.length > 1) {
                     backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
                         .then(response => {
                             this.isLoading = false;
+                            console.log('response.data)');
+                            console.log(response.data);
                             this.results = response.data;
                             this.isOpen = this.results.length > 0;
                         })
