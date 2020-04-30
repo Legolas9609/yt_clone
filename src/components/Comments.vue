@@ -90,7 +90,6 @@
         name: "Comments",
         components: {CommentDeleteButton},
         props: {
-            comments: Array,
             filmId: String,
             isLoggedIn: Boolean,
         },
@@ -98,9 +97,9 @@
             isLoggedIn(isLoggedIn) {
                 this.content.isLoggedIn = isLoggedIn;
             },
-            comments(newComments) {
-                console.log(newComments)
-                // this.content.comments = newComments;
+            filmId(filmId) {
+
+                this.getComments(filmId);
             }
         },
         data() {
@@ -126,19 +125,29 @@
                 this.handleDeleteComment(id)
             });
 
+            this.getComments(this.filmId);
             this.loggedInUser = getUserId();
         },
         methods: {
+            getComments(filmId) {
+                service.getAllCommentsByFilmId(filmId)
+                    .then(response => {
+                        this.content.comments = response.data;
+                        this.content.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        this.error = "Failed to load comments"
+                    })
+            },
             handleScroll() {
                 this.isActive = false;
             },
             handleShow() {
-                console.log('show');
                 window.addEventListener('scroll', this.handleScroll);
                 this.isActive = true;
             },
             handleHide() {
-                console.log('hide');
                 window.removeEventListener('scroll', this.handleScroll);
                 this.isActive = false;
             },
@@ -177,7 +186,6 @@
                     .then(response => {
                         console.log(response);
                         this.content.comments = this.content.comments.filter(_comment => _comment.id !== id);
-                        this.$emit('deleted', this.content.comments)
                     })
                     .catch(error => {
                         console.log(error);
@@ -187,7 +195,6 @@
                 let _sort = sort + '=' + this.dir;
                 service.sortComments(this.filmId, _sort)
                     .then(response => {
-                        console.log(response);
                         this.content.comments = response.data;
                         this.content.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
                     })

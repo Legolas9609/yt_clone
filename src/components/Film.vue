@@ -54,8 +54,8 @@
                 </b-col>
 
                 <b-col class="p-0 mt-4 d-none d-md-block">
-                    <Comments  @deleted="handleDeleteComment"
-                               v-if="width >= 768" v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
+                    <Comments
+                               v-if="width >= 768"  v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
                 </b-col>
             </b-col>
             <b-col class="p-0 mt-4 " cols="12" md="4">
@@ -65,8 +65,8 @@
             </b-col>
             <!--Wyswietlanie komentarzy od filmami jesli mala szerokosc-->
             <b-col class="p-0 mt-4 d-block d-md-none" cols="12">
-                <Comments @deleted="handleDeleteComment"
-                        v-if="width < 768" v-bind:comments="comments" v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
+                <Comments
+                        v-if="width < 768"  v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn"/>
             </b-col>
 
         </b-row>
@@ -80,7 +80,7 @@
     import {config} from "../config";
     import Comments from "./Comments";
     import FilmsNavbar from "./FilmsNavbar";
-    import {displayDate, isLoggedIn} from "../helpers";
+    import { isLoggedIn} from "../helpers";
     import EventBus from "../event-bus";
     import Playlist from "./Playlist";
 
@@ -93,7 +93,6 @@
                 listId: null,
                 filmId: null,
                 films: [],
-                comments: [],
                 apiUrl: config.apiUrl,
                 loading: true,
                 userMeta: {
@@ -106,9 +105,6 @@
             }
         },
         methods: {
-            handleDeleteComment(commentsAfterDelete) {
-                this.comments = commentsAfterDelete;
-            },
             loadFilm(id) {
                 service.updateFilmMetaViews(id, {viewed: true})
                     .then(response => {
@@ -119,15 +115,6 @@
                         this.film = response.data;
                         this.films[this.films.findIndex(el => el.id === this.film.id)] = this.film;
                         this.checkUserLikes();
-                        service.getAllCommentsByFilmId(id)
-                            .then(response => {
-                                this.comments = response.data;
-                                this.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                this.error = "Failed to load comments"
-                            })
                     })
                     .catch(error => {
                         console.log(error);
@@ -238,19 +225,6 @@
                 })
                 .finally(() => {
                     console.log('Film finally')
-                });
-
-
-            await service.getAllCommentsByFilmId(this.film.id)
-                .then(response => {
-                    this.comments = response.data;
-                    this.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.error = "Failed to load comments"
-                }).finally(() => {
-                    console.log('Comments finally')
                 });
 
             await service.getAllFilms()
