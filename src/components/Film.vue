@@ -60,7 +60,7 @@
                               v-bind:film-id="filmId" v-bind:is-logged-in="isLoggedIn" />
                 </b-col>
             </b-col>
-            <b-col class="p-0 mt-4 " cols="12" md="4" style="margin-left: auto">
+            <b-col class="p-0 mt-4 " cols="12" md="4" style="margin-left: auto" v-show="isAllLoaded()">
                 <Playlist v-bind:film-id="filmId" v-bind:film-video-height="this.filmVideoHeight"
                           v-bind:list-id="listId"
                           v-if="listId && filmVideoHeight > 0"/>
@@ -68,8 +68,8 @@
             </b-col>
             <!--Wyswietlanie komentarzy od filmami jesli mala szerokosc-->
             <b-col class="p-0 mt-4 d-block d-md-none" cols="12" v-show="isAllLoaded()">
-                <Comments v-if="width < 768" @commentsLoaded="handleCommentsLoaded"
-                          v-bind:film-id="film.id" v-bind:is-logged-in="isLoggedIn" />
+                <Comments v-if="width < 768 " @commentsLoaded="handleCommentsLoaded"
+                          v-bind:film-id="filmId" v-bind:is-logged-in="isLoggedIn" />
             </b-col>
 
         </b-row>
@@ -212,6 +212,7 @@
 
             const width = window.innerWidth || document.documentElement.clientWidth ||
                 document.body.clientWidth;
+            console.log(width)
             this.width = width;
 
             this.isLoggedIn = isLoggedIn();
