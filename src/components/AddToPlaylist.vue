@@ -7,6 +7,7 @@
             </b-col>
             <b-col cols="4" sm="4" class="d-flex justify-content-end">
                 <md-button v-on:click="onClose($event)"
+                           aria-label="Close"
                            class="m-0 p-0" style="width: 25px; height: 25px; border-radius: 20px; min-width: auto; outline: 0">
                     <font-awesome-icon icon="times" />
                 </md-button>
@@ -33,7 +34,9 @@
                         </b-form-checkbox>
                     </b-col>
                     <b-col class="m-0 p-0 " cols="2" sm="2">
-                        <md-button class="align-self-center mr-3 d-flex align-items-center justify-content-center; "
+                        <md-button
+                                aria-label="Change publicity"
+                                class="align-self-center mr-3 d-flex align-items-center justify-content-center; "
                                    style="width: 25px; height: 25px; border-radius: 20px; margin-left: auto">
 
                             <font-awesome-icon icon="globe"
@@ -66,7 +69,9 @@
         <b-form-invalid-feedback class="dropdown-item-my w-75 ml-auto mr-auto mb-2 mt-2">
         </b-form-invalid-feedback>
         <b-row class="m-0 mb-1 ml-4 mt-2 text-left justify-content-start">
-            <b-button :disabled="isCreating" v-on:click="handleAddPlaylist">Create</b-button>
+            <b-button
+                    aria-label="Create"
+                    :disabled="isCreating" v-on:click="handleAddPlaylist">Create</b-button>
             <b-spinner class="ml-2" v-if="isCreating"></b-spinner>
         </b-row>
 
@@ -106,6 +111,10 @@
                 error: null,
             }
         },
+        async created() {
+            this.isLoggedIn = isLoggedIn();
+            await this.handleGetMyPlaylists();
+        },
         mounted() {
             EventBus.$on('logged', (arg) => {
                 if (arg === 'in') {
@@ -114,8 +123,6 @@
                     this.isLoggedIn = false;
                 }
             });
-            this.isLoggedIn = isLoggedIn();
-            this.handleGetMyPlaylists();
         },
         methods: {
             onClose () {
@@ -131,8 +138,8 @@
                     variant: 'secondary'
                 })
             },
-            handleGetMyPlaylists() {
-                service.getMyPlaylists()
+            async handleGetMyPlaylists() {
+                await service.getMyPlaylists()
                     .then(response => {
                         this.playlists = response.data;
                     })
@@ -149,10 +156,10 @@
                 this.error = null;
                 event.stopPropagation();
             },
-            handleAddPlaylist() {
+            async handleAddPlaylist() {
                 this.isCreating = true;
                 this.form.public = this.selected === 'public';
-                service.addPlaylist(this.form)
+                await service.addPlaylist(this.form)
                     .then(response => {
                         this.playlists.push(response.data);
                         this.toast('Toast playlist',
@@ -176,11 +183,11 @@
                     }
                 });
             },
-            handleAddRemoveToPlaylist(playlist, remove) {
+            async handleAddRemoveToPlaylist(playlist, remove) {
                 const id = playlist.id;
                 const _films = [this.filmId];
                 const _form = {films: _films, removeFilms: !remove};
-                service.updatePlaylist(id, _form)
+                await service.updatePlaylist(id, _form)
                     .then(response => {
                         console.log(response);
                         EventBus.$emit('playlist_changed', remove ? 'add' : 'remove', response.data);
@@ -197,9 +204,9 @@
                         }
                     });
             },
-            handleChangeIsPublic(id, _public) {
+            async handleChangeIsPublic(id, _public) {
                 const _form = {isPublic: !_public};
-                service.updatePlaylist(id, _form)
+                await service.updatePlaylist(id, _form)
                     .then(response => {
                         console.log(response);
                         console.log(this.playlists[this.playlists.findIndex(el => el.id === id)]);

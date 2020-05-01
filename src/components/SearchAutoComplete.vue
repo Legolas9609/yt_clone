@@ -1,7 +1,7 @@
 <template>
     <div :style="width" class="v-autocomplete" style="margin: 0;">
-        <input @input="onChange($event)"
-               :value='search'
+        <input :value='search'
+               @input="onChange($event)"
                @keydown.down="onArrowDown"
                @keydown.enter="onEnter"
                @keydown.up="onArrowUp"
@@ -10,7 +10,6 @@
                type="text"
         />
         <ul class="v-autocomplete-list"
-            id="autocomplete-results"
             style="position: absolute; padding: 0; list-style-type: none;"
             v-show="isOpen"
         >
@@ -28,11 +27,19 @@
                 v-else
                 v-for="(result, i) in results"
             >
-                <md-avatar
-                        class="mr-3" variant="primary">
-                    <img :src="`${apiUrl}films/${result.id}/thumbnail/preview`" alt="">
-                </md-avatar>
-                <span>{{ result.title }}</span>
+                <b-row class="m-0 p-0">
+                    <b-col class="m-0 p-0" cols="2" sm="2">
+                        <md-avatar
+                                class="mr-3" variant="primary">
+                            <img :src="`${apiUrl}films/${result.id}/thumbnail/preview`"
+                                 :alt="`Film added by ${result.authorUsername}`">
+                        </md-avatar>
+                    </b-col>
+                    <b-col cols="10" sm="10">
+                        <span v-line-clamp:20="1">{{ result.title }}</span>
+                    </b-col>
+                </b-row>
+
             </li>
         </ul>
     </div>
@@ -117,26 +124,26 @@
                 this.search = ''
 
             },
-            loadMoreResults(value) {
-                    if (value.length > 1) {
-                        backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
-                            .then(response => {
-                                this.isLoading = false;
-                                console.log('response.data)');
-                                console.log(response.data);
-                                this.results = response.data;
-                                this.isOpen = this.results.length > 0;
-                            })
-                            .catch(error => {
-                                console.log(error);
-                                this.error = "Failed to load films"
-                            })
-                            .finally(() => this.isLoading = false)
-                    } else {
-                        this.isOpen = false;
-                        this.isLoading = false;
-                        this.results = []
-                    }
+            async loadMoreResults(value) {
+                if (value.length > 1) {
+                    await backendService.getAllFilmsAndFilterAndSort('title_starts=' + value)
+                        .then(response => {
+                            this.isLoading = false;
+                            console.log('response.data)');
+                            console.log(response.data);
+                            this.results = response.data;
+                            this.isOpen = this.results.length > 0;
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            this.error = "Failed to load films"
+                        })
+                        .finally(() => this.isLoading = false)
+                } else {
+                    this.isOpen = false;
+                    this.isLoading = false;
+                    this.results = []
+                }
 
             },
         }

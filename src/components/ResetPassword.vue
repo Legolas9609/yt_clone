@@ -26,6 +26,7 @@
             <template v-slot:modal-footer>
                     <div class="w-100 d-flex algin-content-center">
                     <b-button
+                        aria-label="Reset"
                         variant="primary"
                         @click="handleOk"
                         :disabled="isReseting"
@@ -87,14 +88,14 @@
                 this.$router.push(`${publicPath}`)
             },
             onSubmit() {
-                this.$validator.validateAll().then(result => {
+                this.$validator.validateAll().then(async result => {
                     if (!result) {
                         return;
                     }
 
                     this.isReseting = true;
 
-                    backendService.reset(this.$route.params.token, this.form)
+                    await backendService.reset(this.$route.params.token, this.form)
                     .then((response) => {
                         console.log(response);
                         this.messages.success = "Password reseted succesfully! Redirectiong to login!";

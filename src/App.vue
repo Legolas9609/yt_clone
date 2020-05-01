@@ -1,10 +1,12 @@
 <template>
-    <div id="app">
-        <Header/>
-        <router-view></router-view>
-        <router-view name="reset"></router-view>
+    <main>
+        <div id="app">
+            <Header/>
+            <router-view></router-view>
+            <router-view name="reset"></router-view>
 
-    </div>
+        </div>
+    </main>
 </template>
 
 <script>
@@ -50,7 +52,7 @@
     }
 
     .m-nav-link a {
-        color: rgba(0, 0, 0, .5) !important;
+        color: rgba(0, 0, 0, .55) !important;
     }
 
     .m-nav-link a:hover {
@@ -120,4 +122,6 @@
         color: #212529 !important;
         background-color: #212529 !important;
     }
+
+
 </style>

@@ -44,10 +44,12 @@
             </b-form-group>
             </b-form>
             <b-form-group>
-                <b-button variant="link" style="padding-left: 0" @click="handleRegisterClick">
+                <b-button variant="link"
+                          aria-label="Register" style="padding-left: 0" @click="handleRegisterClick">
                     Register
                 </b-button>
-                <b-button variant="link" @click="handleForgotClick">
+                <b-button variant="link"
+                          aria-label="Forgot" @click="handleForgotClick">
                     Forgot password?
                 </b-button>
             </b-form-group>
@@ -98,9 +100,6 @@
                 }
                 return null;
             },
-            resetModal() {
-
-            },
             handleOk(bvModalEvt) {
                 this.isLoggingIn = true;
                 bvModalEvt.preventDefault()
@@ -131,17 +130,16 @@
                         this.$router.push({path: `${publicPath}forgot`, replace: true, query: this.$route.query})
             },
             onSubmit() {
-                this.$validator.validateAll().then(result => {
+                this.$validator.validateAll().then(async result => {
                     if (!result) {
                         this.isLoggingIn = false;
                         return;
                     }
 
-                    backendService.login(this.form)
+                    await backendService.login(this.form)
                         .then(response => {
-                            console.log(response)
                             localStorage.setItem("token", response.data.accessToken);
-                            EventBus.$emit('logged', 'in')
+                            EventBus.$emit('logged', 'in');
                             this.handleClose();
                         })
                         .catch(error => {

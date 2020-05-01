@@ -115,10 +115,6 @@
                 }
                 return null;
             },
-            resetModal() {
-                this.name = ''
-                this.nameState = null
-            },
             handleOk(bvModalEvt) {
                 bvModalEvt.preventDefault()
                 this.onSubmit()
@@ -132,14 +128,14 @@
                 this.$router.push({path: currentLocation, query: this.$route.query})
             },
             onSubmit() {
-                this.$validator.validateAll().then(result => {
+                this.$validator.validateAll().then(async result => {
                     if (!result) {
                         return;
                     }
 
 
                     this.isRegistering = true;
-                    backendService.register(this.form)
+                    await backendService.register(this.form)
                     .then(() => {
                         if (!this.$route.path.includes('login') &&
                             !this.$route.path.includes('forgot') &&

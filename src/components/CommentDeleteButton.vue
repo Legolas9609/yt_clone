@@ -8,6 +8,7 @@
             style="width: 25px; height: 25px; border-radius: 20px; margin-left: auto">
         <md-button class="d-flex justify-content-center align-items-center"
                    md-menu-trigger
+                   aria-label="Comment"
                    style="width: 25px; height: 25px; border-radius: 20px; min-width: auto; outline: 0">
             <md-ripple class="d-flex justify-content-center align-items-center"
                        style="width: 25px; height: 25px; border-radius: 20px">
@@ -39,19 +40,16 @@
         },
         methods: {
             handleDelete () {
-                console.log('aldaldlda')
                 EventBus.$emit('deleted_comment', this.commentId);
             },
             handleScroll() {
                 this.isActive = false;
             },
             handleShow() {
-                console.log('show');
                 window.addEventListener('scroll', this.handleScroll);
                 this.isActive = true;
             },
             handleHide() {
-                console.log('hide');
                 window.removeEventListener('scroll', this.handleScroll);
                 this.isActive = false;
             },

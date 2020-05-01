@@ -90,14 +90,14 @@
                 this.$router.push({path: currentLocation, query: this.$route.query})
             },
             onSubmit() {
-                this.$validator.validateAll().then(result => {
+                this.$validator.validateAll().then(async result => {
                     if (!result) {
                         return;
                     }
 
                     this.isSending = true;
 
-                    backendService.forget(this.form)
+                    await backendService.forget(this.form)
                     .then((response) => {
                         console.log(response);
                         this.success = response.data;

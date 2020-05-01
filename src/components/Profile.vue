@@ -7,7 +7,7 @@
                    lg="2" md="3" siz sm="4" v-for="(film, index) in films">
                 <div class="embed-responsive embed-responsive-16by9 container"
                      @click="handleFilmChoose(film.id)">
-                    <b-img :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
+                    <b-img alt="" :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
                     <font-awesome-icon class="middle" icon="play"/>
                 </div>
                 <b-row class="p-0 m-0 mt-1">
@@ -37,6 +37,7 @@
                                sm="6"
                                style="margin-left: auto; height: 25px; width: 25px !important; line-height: 0 !important">
                             <md-button class="m-0 p-0"
+                                       aria-label="Delete"
                                        style="width: 25px; height: 25px; border-radius: 20px">
 
                                 <font-awesome-icon class="fa-sm" icon="trash-alt"/>
@@ -83,6 +84,7 @@
                                 class="m-0 p-0"
                               v-on:click="handleRemovePlaylist(playlist.id)">
                             <md-button class="m-0 p-0"
+                                       aria-label="Delete"
                                        style="width: 25px; height: 25px; border-radius: 20px">
 
                                 <font-awesome-icon class="fa-sm" icon="trash-alt"/>
@@ -128,24 +130,7 @@
             EventBus.$off('logged_out_profile');
             EventBus.$off('playlist_changed_profile');
         },
-        async mounted() {
-            EventBus.$on('logged_out_profile', () => {
-                    this.isLoggedIn = false;
-                    this.$router.push(`${publicPath}`);
-            });
-
-            EventBus.$on('playlist_changed_profile', (playlist) => {
-                playlist.thumbnails = [];
-                playlist.films.forEach(_film => {
-                        playlist.thumbnails.push(`${this.apiUrl}films/${_film}/thumbnail/preview`);
-                });
-                playlist.thumbnails.push(this.notFoundFilmsThumbnail);
-                playlist.thumbnails.forEach(_thumbnail => _thumbnail +  "?" + Date.now());
-                playlist.thumbnail = playlist.thumbnails[0];
-                this.playlists[this.playlists.findIndex(el => el.id === playlist.id)] = playlist;
-                this.playlists = this.playlists.filter(_playlist => _playlist.id !== null);
-            });
-
+        async created() {
             this.isLoggedIn = await isLoggedIn();
 
             await service.getMyPlaylists()
@@ -175,6 +160,26 @@
                 })
                 .finally(() => this.isLoading = false);
         },
+        async mounted() {
+            EventBus.$on('logged_out_profile', () => {
+                    this.isLoggedIn = false;
+                    this.$router.push(`${publicPath}`);
+            });
+
+            EventBus.$on('playlist_changed_profile', (playlist) => {
+                playlist.thumbnails = [];
+                playlist.films.forEach(_film => {
+                        playlist.thumbnails.push(`${this.apiUrl}films/${_film}/thumbnail/preview`);
+                });
+                playlist.thumbnails.push(this.notFoundFilmsThumbnail);
+                playlist.thumbnails.forEach(_thumbnail => _thumbnail +  "?" + Date.now());
+                playlist.thumbnail = playlist.thumbnails[0];
+                this.playlists[this.playlists.findIndex(el => el.id === playlist.id)] = playlist;
+                this.playlists = this.playlists.filter(_playlist => _playlist.id !== null);
+            });
+
+
+        },
         methods: {
 
             onPlaylistThumbnailLoaded(value, index) {
@@ -195,8 +200,8 @@
                     this.$router.push(`${publicPath}films/${id}?list=${playlist.id}`)
                 }
             },
-            handleRemovePlaylist(id) {
-                service.removePlaylist(id)
+            async handleRemovePlaylist(id) {
+                await service.removePlaylist(id)
                     .then(() => {
                         this.playlists = this.playlists.filter(_playlist => _playlist.id !== id);
                     })
@@ -208,8 +213,8 @@
                         }
                     });
             },
-            handleRemoveFilm(id) {
-                service.removeFilm(id)
+            async handleRemoveFilm(id) {
+                await service.removeFilm(id)
                     .then(() => {
                         this.playlists.forEach(_playlist => {
                             const _index = _playlist.films.indexOf(id);

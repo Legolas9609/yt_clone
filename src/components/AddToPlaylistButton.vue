@@ -8,7 +8,9 @@
             md-direction="bottom-end"
             style="width: 25px; height: 25px; border-radius: 20px; position: relative"
             v-if="isLoggedIn">
-        <md-button class="d-flex justify-content-center align-items-center"
+        <md-button
+                aria-label="Playlist"
+                class="d-flex justify-content-center align-items-center"
                    md-menu-trigger
                    style="width: 25px; height: 25px; border-radius: 20px; min-width: auto; outline: 0">
             <md-ripple class="d-flex justify-content-center align-items-center"

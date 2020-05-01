@@ -41,7 +41,8 @@
                             <span>Add thumbnail</span>
                         </label>
 
-                        <img :src="preview.thumbnail"
+                        <img :alt="`Film being added`"
+                             :src="preview.thumbnail"
                              class="embed-responsive-item"
                              v-if="preview.thumbnail.length > 0"/>
 
@@ -78,6 +79,7 @@
 
                 <b-col class="mb-3 d-flex justify-content-start algin-content-center" sm="12">
                     <b-button @click="handleCreateFilm" variant="primary"
+                              aria-label="Add"
                         :disabled="isAdding">
                         Add
                     </b-button>
@@ -123,7 +125,7 @@
                 this.form.thumbnail = event.target.files[0];
                 this.preview.thumbnail = URL.createObjectURL(event.target.files[0])
             },
-            handleCreateFilm() {
+            async handleCreateFilm() {
                 this.isAdding = true;
                 this.showError = false;
                 this.errorMessage = "";
@@ -132,7 +134,7 @@
                 formData.append('description', this.form.description);
                 formData.append('video', this.form.film);
                 formData.append('thumbnail', this.form.thumbnail);
-                backendService.createNewFilm(formData)
+                await backendService.createNewFilm(formData)
                     .then(response => {
                         console.log(response);
                         this.$router.push(`${publicPath}films/${response.data.id}`)

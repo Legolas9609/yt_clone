@@ -1,7 +1,8 @@
 <template>
     <b-col>
         <b-col class="d-flex justify-content-start mt-3 mb-3 ">
-            <b-button class="p-2" v-b-toggle.collapse-filter>
+            <b-button class="p-2" v-b-toggle.collapse-filter
+                      aria-label="Filter">
                 <font-awesome-icon icon="filter"/>
             </b-button>
         </b-col>
@@ -43,14 +44,15 @@
 
         <b-col class="mt-2 mb-3 dropdown-divider" cols="12"/>
 
-        <b-row>
+        <b-row v-if="isLoading === false">
             <b-col v-on:click="handleFilmChooseFilmsSearch(film.id)"
                     :key="`film-${index}`" class="mt-4 film-preview-holder m-0 mb-1 m-container text-justify" cols="12"
                    lg="8" siz v-for="(film, index) in films">
                 <b-row class="d-sm-none mb-4">
                     <b-col cols="8" sm="4">
                         <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                            <img :src="`${apiUrl}films/${film.id}/thumbnail/preview`" alt=""
+                            <img :src="`${apiUrl}films/${film.id}/thumbnail/preview`"
+                                 :alt="`Film added by ${film.authorUsername}`"
                                  class="image embed-responsive-item"/>
                             <font-awesome-icon class="middle" icon="play"/>
                         </div>
@@ -77,7 +79,8 @@
                     <b-row class="style-search">
                         <b-col cols="8" sm="4">
                             <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                                <img :src="`${apiUrl}films/${film.id}/thumbnail/preview`" alt=""
+                                <img :src="`${apiUrl}films/${film.id}/thumbnail/preview`"
+                                     :alt="`Film added by ${film.authorUsername}`"
                                      class="image embed-responsive-item"/>
                                 <font-awesome-icon class="middle" icon="play"/>
                             </div>
@@ -106,6 +109,7 @@
                 </b-col>
             </b-col>
         </b-row>
+        <b-spinner label="Spinning" type="grow" v-if="isLoading === true" class="mt-2"></b-spinner>
         <router-view></router-view>
     </b-col>
 </template>
@@ -122,6 +126,7 @@
             return {
                 films: [],
                 apiUrl: config.apiUrl,
+                isLoading: true,
                 currents: {
                     sort: {
                         id: null,
@@ -144,11 +149,11 @@
                 ]
             }
         },
-        mounted() {
-            this.loadFilms()
+        async created() {
+            await this.loadFilms()
         },
-        beforeRouteUpdate(to, from, next) {
-            this.loadFilms(to.query);
+        async beforeRouteUpdate(to, from, next) {
+            await this.loadFilms(to.query);
             next()
         },
         methods: {
@@ -156,20 +161,20 @@
                 this.$router.push(`${publicPath}films/${id}`)
             },
             handleFilmsSearch(action, data) {
-                let {path, filter, sort} = buildSearchPath(action, data, this.title_starts, this.currents.filter, this.currents.sort);
+                let {query, filter, sort} = buildSearchPath(action, data, this.title_starts, this.currents.filter, this.currents.sort);
                 this.currents.filter = filter;
                 this.currents.sort = sort;
-
-                this.$router.push(`${publicPath}search?${path}`)
+                this.$router.push( {path: `${publicPath}search`, query: query})
             },
-            loadFilms(queryParams = this.$route.query) {
+            async loadFilms(queryParams = this.$route.query) {
+                this.isLoading = true;
 
                 let {path, title_starts, filter, sort} = extractFromRoute(queryParams, this.filters, this.sorts);
                 this.currents.filter = filter;
                 this.currents.sort = sort;
                 this.title_starts = title_starts;
 
-                backendService.getAllFilmsAndFilterAndSort(path)
+                await backendService.getAllFilmsAndFilterAndSort(path)
                     .then(response => {
                         this.films = response.data
                     })
@@ -177,7 +182,7 @@
                         console.log(error);
                         this.error = "Failed to load films"
                     })
-                    .finally(() => this.loading = false)
+                    .finally(() => this.isLoading = false)
             }
         },
     }

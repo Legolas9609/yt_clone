@@ -84,22 +84,15 @@
                 }
             },
         },
-        mounted() {
-            EventBus.$on('logged', (arg) => {
-                if (arg === 'in') {
-                    this.isLoggedIn = true;
-                } else if (arg === 'out') {
-                    this.isLoggedIn = false;
-                }
-            });
+        async created() {
             this.isLoggedIn = isLoggedIn();
-            service.getAllPlaylists()
+            await service.getAllPlaylists()
                 .then(response => {
                     this.playlists = response.data;
                     this.playlists.forEach(_playlist => {
                         _playlist.thumbnails = [];
                         _playlist.films.forEach(_film => {
-                           _playlist.thumbnails.push(`${this.apiUrl}films/${_film}/thumbnail/preview`);
+                            _playlist.thumbnails.push(`${this.apiUrl}films/${_film}/thumbnail/preview`);
                         });
                         _playlist.thumbnails.push('placeholder.png');
                         _playlist.thumbnail = _playlist.thumbnails[0];
@@ -111,6 +104,16 @@
                     this.error = "Failed to load playlists"
                 })
                 .finally(() => this.isLoading = false)
+        },
+        mounted() {
+            EventBus.$on('logged', (arg) => {
+                if (arg === 'in') {
+                    this.isLoggedIn = true;
+                } else if (arg === 'out') {
+                    this.isLoggedIn = false;
+                }
+            });
+
         }
     }
 </script>

@@ -20,6 +20,7 @@
                        sm="2"
                        style="height: 24px; width: 24px" v-if="owner === playlist.authorID">
                     <md-button class="p-0 d-flex justify-content-center align-items-center"
+                               aria-label="Remove"
                               v-on:click="handleRemovePlaylist"
                               style="height: 24px; width: 24px; border-radius: 20px">
                         <font-awesome-icon icon="trash-alt"/>
@@ -46,7 +47,8 @@
                         </b-col>
                         <b-col class="pr-2 pl-2" cols="6" sm="6">
                             <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                                <img :src="film.thumbnail" alt=""
+                                <img :src="film.thumbnail"
+                                     :alt="`Film added by ${film.authorUsername}`"
                                      class="image embed-responsive-item"/>
                                 <font-awesome-icon class="middle" icon="play"/>
                             </div>
@@ -66,6 +68,7 @@
                        cols="2"
                        sm="2" v-if="owner === playlist.authorID">
                     <md-button class=" p-0 m-0" style="height: 20px; width: 20px; border-radius: 20px"
+                               aria-label="Remove"
                               v-on:click="handleRemoveFilmFromPlaylist($event, film.id)">
                         <font-awesome-icon class="fa-sm" icon="trash-alt"/>
                     </md-button>
@@ -140,11 +143,11 @@
                         this.error = "Failed to load films"
                     });
             },
-            handleRemoveFilmFromPlaylist(event, id) {
+            async handleRemoveFilmFromPlaylist(event, id) {
                 event.stopPropagation();
                 const _films = [id];
                 const _form = {films: _films, removeFilms: true};
-                service.updatePlaylist(this.playlist.id, _form)
+                await service.updatePlaylist(this.playlist.id, _form)
                     .then(response => {
                         this.playlist = response.data;
                         this.films = this.films.filter(el => el.id !== id);
@@ -159,8 +162,8 @@
                         }
                     });
             },
-            handleRemovePlaylist() {
-                service.removePlaylist(this.playlist.id)
+            async handleRemovePlaylist() {
+                await service.removePlaylist(this.playlist.id)
                     .then(() => {
                         this.playlist = null;
                         this.films = [];
@@ -183,6 +186,7 @@
         watch: {
             filmVideoHeight(newFilmVideoHeight) {
                 this.sizes.height = newFilmVideoHeight;
+                console.log(newFilmVideoHeight)
                 if (this.isLoading === false && this.playlist)
                     this.sizes.headerHeight = this.$refs.playlistHeader.clientHeight;
             },
@@ -204,7 +208,7 @@
                 this.sizes.headerHeight = this.$refs.playlistHeader.clientHeight;
             })
         },
-        async mounted() {
+        async created() {
 
             this.sizes.height = this.filmVideoHeight;
 
@@ -212,6 +216,16 @@
                 filmId: this.filmId,
                 listId: this.listId
             };
+
+            this.owner = await getUserId();
+            this.isLoggedIn = await isLoggedIn();
+
+            await this.handleLoadPlaylist();
+
+            await this.handleLoadFilms(this.content.listId);
+        },
+        mounted() {
+
 
             EventBus.$on('logged', (arg) => {
                 if (arg === 'in') {
@@ -237,13 +251,6 @@
                 }
             });
 
-
-            this.owner = await getUserId();
-            this.isLoggedIn = await isLoggedIn();
-
-            await this.handleLoadPlaylist();
-
-            await this.handleLoadFilms(this.content.listId);
         }
 
     }

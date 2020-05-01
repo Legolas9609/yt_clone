@@ -6,7 +6,7 @@
                    class="mb-4 film-preview-holder">
                 <div class="embed-responsive embed-responsive-16by9 z-depth-1-half container m-container"
                      @click="handleFilmChooseFilmsHomepage(film.id)">
-                    <b-img :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
+                    <b-img :alt="`Film added by ${film.authorUsername}`" :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
                     <font-awesome-icon icon="play"  class="middle"/>
                 </div>
                 <b-row class="m-0 mt-2">
@@ -59,20 +59,13 @@
                this.$router.push(`${publicPath}films/${id}`)
             },
         },
-        mounted() {
-            EventBus.$on('logged', (arg) => {
-                if (arg === 'in') {
-                    this.isLoggedIn = true;
-                } else if (arg === 'out') {
-                    this.isLoggedIn = false;
-                }
-            });
+        async created() {
 
             this.isLoggedIn = isLoggedIn();
 
             this.isLoading = true;
 
-            service.getAllFilms()
+            await service.getAllFilms()
                 .then(response => {
                     this.films = response.data
                 })
@@ -81,6 +74,15 @@
                     this.error = "Failed to load todos"
                 })
                 .finally(() => this.isLoading = false)
+        },
+        mounted() {
+            EventBus.$on('logged', (arg) => {
+                if (arg === 'in') {
+                    this.isLoggedIn = true;
+                } else if (arg === 'out') {
+                    this.isLoggedIn = false;
+                }
+            });
         }
     }
 </script>

@@ -5,7 +5,7 @@
                 <b-col class="m-0 pl-0" cols="9" sm="10">
                     <b-form-textarea
                             :state="textareaError && textareaError === null"
-                            aria-describedby="input-comment-live-feedback"
+                            aria-de="input-comment-live-feedback"
                             class="textarea-no-scrollbars"
                             data-vv-as="Comment"
                             id="textarea"
@@ -22,6 +22,7 @@
                 </b-col>
                 <b-col class="m-0 p-0" cols="3" sm="2">
                     <b-button :disabled="isAdding" class="mt-3"
+                              aria-label="Submit"
                               v-on:blur="textareaError = null"
                               v-on:click="handleAddComment"
                               variant="primary">
@@ -33,7 +34,7 @@
         <b-col class="p-0 mt-4 mb-4" sm="12">
             <b-row>
                 <b-col class="text-justify" cols="7" md="4" sm="5">
-                    <p class="m-0">{{content.comments.length + " comments"}}</p>
+                    <p class="m-0">{{comments.length + " comments"}}</p>
                 </b-col>
                 <div cols="2" sm="2">
                     <b-dropdown
@@ -58,7 +59,7 @@
         </b-col>
         <b-col :key="`_comment-${index}`" class="p-0 mt-4 comment-holder"
                cols="12"
-               v-for="(_comment, index) in content.comments">
+               v-for="(_comment, index) in comments">
             <b-row class="w-100" style="margin: 0">
 
                 <p class="m-0 font-weight-bold">
@@ -108,37 +109,44 @@
                 isAdding: false,
                 textareaError: null,
                 dir: 1,
+                comments: [],
                 content: {
-                    comments: this.comments,
                     isLoggedIn: this.isLoggedIn,
                 },
                 loggedInUser: null,
                 isMobile: isMobile(),
                 isActive: false,
+                isLoading: true,
             }
         },
         beforeDestroy() {
             EventBus.$off('deleted_comment');
         },
+        async created() {
+            this.loggedInUser = await getUserId();
+
+            await this.getComments(this.filmId);
+        },
         mounted() {
             EventBus.$on('deleted_comment', (id) => {
                 this.handleDeleteComment(id)
             });
-
-            this.getComments(this.filmId);
-            this.loggedInUser = getUserId();
         },
         methods: {
-            getComments(filmId) {
-                service.getAllCommentsByFilmId(filmId)
+            async getComments(filmId) {
+                this.isLoading = true;
+                await service.getAllCommentsByFilmId(filmId)
                     .then(response => {
-                        this.content.comments = response.data;
-                        this.content.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
+                        this.comments = response.data;
+                        this.comments.map(comment => comment.createdDate = displayDate(comment.createdDate));
+                        this.$emit('commentsLoaded')
+                        this.isLoading = false
                     })
                     .catch(error => {
                         console.log(error);
                         this.error = "Failed to load comments"
-                    })
+                        this.isLoading = false
+                    });
             },
             handleScroll() {
                 this.isActive = false;
@@ -151,7 +159,7 @@
                 window.removeEventListener('scroll', this.handleScroll);
                 this.isActive = false;
             },
-            handleAddComment() {
+            async handleAddComment() {
                 this.isAdding = true;
 
                 if (!this.comment || this.comment.length < 10) {
@@ -162,13 +170,13 @@
 
                 const comment = {text: this.comment};
 
-                service.createComment(this.filmId, comment)
+                await service.createComment(this.filmId, comment)
                     .then(response => {
                         this.comment = null;
                         this.isAdding = false;
                         let _comment = response.data;
                         _comment.createdDate = displayDate(_comment.createdDate);
-                        this.content.comments.push(_comment);
+                        this.comments.push(_comment);
                     })
                     .catch(error => {
                         if (error.response) {
@@ -180,23 +188,23 @@
                         }
                     });
             },
-            handleDeleteComment(id) {
+            async handleDeleteComment(id) {
 
-                service.removeComment(id)
+                await service.removeComment(id)
                     .then(response => {
                         console.log(response);
-                        this.content.comments = this.content.comments.filter(_comment => _comment.id !== id);
+                        this.comments = this.comments.filter(_comment => _comment.id !== id);
                     })
                     .catch(error => {
                         console.log(error);
                     });
             },
-            handleSort(sort) {
+            async handleSort(sort) {
                 let _sort = sort + '=' + this.dir;
-                service.sortComments(this.filmId, _sort)
+                await service.sortComments(this.filmId, _sort)
                     .then(response => {
-                        this.content.comments = response.data;
-                        this.content.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
+                        this.comments = response.data;
+                        this.comments.map(comment => comment.createdDate = displayDate(comment.createdDate))
                     })
                     .catch(error => {
                         if (error.response) {
