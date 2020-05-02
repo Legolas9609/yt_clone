@@ -1,5 +1,5 @@
 <template>
-     <b-img
+     <img
              :alt="`Playlist thumbnail`" v-show="loaded"  :src="thumbnail" class="embed-responsive-item image pr-2"
                            v-on:error="handleImageError" v-on:load="handleImageLoaded"/>
 </template>

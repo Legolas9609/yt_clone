@@ -7,7 +7,7 @@
                    lg="2" md="3" siz sm="4" v-for="(film, index) in films">
                 <div class="embed-responsive embed-responsive-16by9 container"
                      @click="handleFilmChoose(film.id)">
-                    <b-img alt="" :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
+                    <img alt="" :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
                     <font-awesome-icon class="middle" icon="play"/>
                 </div>
                 <b-row class="p-0 m-0 mt-1">

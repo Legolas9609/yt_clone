@@ -13,7 +13,6 @@ import {
     BButton,
     BCol,
     BCollapse,
-    BContainer,
     BDropdown,
     BDropdownItem,
     BForm,
@@ -63,7 +62,6 @@ Vue.component('b-navbar-brand', BNavbarBrand);
 Vue.component('b-modal', BModal);
 Vue.component('b-col', BCol);
 Vue.component('b-row', BRow);
-Vue.component('b-container', BContainer);
 Vue.component('b-button', BButton);
 Vue.component('b-form-group', BFormGroup);
 Vue.component('b-form', BForm);
@@ -75,25 +73,6 @@ Vue.component('b-alert', BAlert);
 Vue.component('b-spinner', BSpinner);
 Vue.component('b-form-invalid-feedback', BFormInvalidFeedback);
 Vue.component('b-dropdown-item', BDropdownItem);
-
-/*
-
-Vue.use(BCol)
-Vue.use(BRow)
-Vue.use(BContainer)
-Vue.use(BModal)
-Vue.use(BButton)
-Vue.use(BFormGroup)
-Vue.use(BForm)
-Vue.use(BFormInput)
-Vue.use(BFormTextarea)
-Vue.use(BCollapse)
-Vue.use(BDropdown)
-Vue.use(BAlert)
-Vue.use(BSpinner)
-Vue.use(BFormInvalidFeedback)
-Vue.use(BDropdownItem)
-*/
 
 library.add(faTimes);
 library.add(faPlay);
