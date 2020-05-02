@@ -4,7 +4,10 @@ import VeeValidate from 'vee-validate'
 import lineClamp from 'vue-line-clamp'
 import ReadMore from 'vue-read-more';
 
-import {BootstrapVue} from 'bootstrap-vue'
+import { MdRipple, MdAvatar, MdButton, MdMenu, MdList } from 'vue-material/dist/components'
+import 'vue-material/dist/vue-material.min.css'
+import './md_default.css'
+
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {
     faEllipsisV,
@@ -58,10 +61,14 @@ Vue.use(VeeValidate, {
     errorBagName: 'veeErrors'
 });
 
-Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(ReadMore);
 
+Vue.use(MdRipple);
+Vue.use(MdAvatar);
+Vue.use(MdButton);
+Vue.use(MdMenu);
+Vue.use(MdList);
 
 Vue.use(lineClamp, {
     // plugin options
