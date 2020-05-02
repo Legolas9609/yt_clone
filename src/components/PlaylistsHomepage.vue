@@ -1,5 +1,6 @@
 <template>
     <b-col class="m-0 ">
+        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
         <b-row class="mt-5" v-if="isLoading === false">
             <b-col v-show="playlist.films.length > 0  &&
                            playlist.thumbnail !== notFoundFilmsThumbnail &&
@@ -34,7 +35,6 @@
 
             </b-col>
         </b-row>
-        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
         <router-view></router-view>
     </b-col>
 

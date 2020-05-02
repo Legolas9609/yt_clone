@@ -1,7 +1,8 @@
 <template>
     <b-col>
-        <b-row>
-            <b-col md="8" v-show="isAllLoaded()">
+        <b-spinner label="Spinning" type="grow" v-if="!isAllLoaded()"></b-spinner>
+        <b-row v-show="isAllLoaded()">
+            <b-col md="8">
                 <b-col class="mt-4" cols="12">
                     <div class="embed-responsive embed-responsive-16by9 z-depth-1-half "
                          ref="filmVideoRef"
@@ -13,7 +14,7 @@
                         </video>
                     </div>
                 </b-col>
-                <b-col class="pl-3 pr-3 mt-4" sm="12" v-if="film">
+                <b-col class="pl-3 pr-3 mt-4" sm="12" v-if="film" >
                     <b-row>
                         <b-col class="text-justify" sm="12">
                             <p class="font-weight-bold">{{this.film.title}}</p>
@@ -55,25 +56,24 @@
                     </b-row>
                 </b-col>
 
-                <b-col class="p-0 mt-4 d-none d-md-block" v-show="isAllLoaded()">
+                <b-col class="p-0 mt-4 d-none d-md-block"  >
                     <Comments v-if="width >= 768" @commentsLoaded="handleCommentsLoaded"
                               v-bind:film-id="filmId" v-bind:is-logged-in="isLoggedIn" />
                 </b-col>
             </b-col>
-            <b-col class="p-0 mt-4 " cols="12" md="4" style="margin-left: auto" v-show="isAllLoaded()">
+            <b-col class="p-0 mt-4 " cols="12" md="4" style="margin-left: auto" >
                 <Playlist v-bind:film-id="filmId" v-bind:film-video-height="this.filmVideoHeight"
                           v-bind:list-id="listId"
                           v-if="listId && filmVideoHeight > 0"/>
                 <FilmsNavbar @filmsLoaded="handleFilmsLoaded"  v-bind:film-id="filmId"/>
             </b-col>
             <!--Wyswietlanie komentarzy od filmami jesli mala szerokosc-->
-            <b-col class="p-0 mt-4 d-block d-md-none" cols="12" v-show="isAllLoaded()">
+            <b-col class="p-0 mt-4 d-block d-md-none" cols="12" >
                 <Comments v-if="width < 768 " @commentsLoaded="handleCommentsLoaded"
                           v-bind:film-id="filmId" v-bind:is-logged-in="isLoggedIn" />
             </b-col>
 
         </b-row>
-        <b-spinner label="Spinning" type="grow" v-if="!isAllLoaded()"></b-spinner>
         <router-view></router-view>
     </b-col>
 </template>

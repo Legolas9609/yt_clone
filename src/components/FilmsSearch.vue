@@ -43,6 +43,7 @@
         </b-collapse>
 
         <b-col class="mt-2 mb-3 dropdown-divider" cols="12"/>
+        <b-spinner label="Spinning" type="grow" v-if="isLoading === true" class="mt-2"></b-spinner>
 
         <b-row v-if="isLoading === false">
             <b-col v-on:click="handleFilmChooseFilmsSearch(film.id)"
@@ -109,7 +110,6 @@
                 </b-col>
             </b-col>
         </b-row>
-        <b-spinner label="Spinning" type="grow" v-if="isLoading === true" class="mt-2"></b-spinner>
         <router-view></router-view>
     </b-col>
 </template>

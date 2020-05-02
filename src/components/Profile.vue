@@ -1,5 +1,6 @@
 <template>
     <b-col class="m-0 ">
+        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
     <b-col class="m-0 " v-if="isLoading === false">
         <b-row class="mt-5">
             <b-col :key="`film-${index}`" class="mb-5 m-container film-preview-holder playlist-remove-container"
@@ -98,7 +99,6 @@
         </b-row>
     </b-col>
 
-        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
         <router-view></router-view>
     </b-col>
 </template>

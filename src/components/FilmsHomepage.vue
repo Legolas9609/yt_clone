@@ -1,6 +1,7 @@
 
 <template>
     <b-col class="m-0 ">
+        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
         <b-row v-if="isLoading === false">
             <b-col siz v-for="(film, index) in films" :key="`film-${index}`" cols="6" sm="4" md="3" lg="2"
                    class="mb-4 film-preview-holder">
@@ -29,7 +30,6 @@
                 </p>
             </b-col>
         </b-row>
-        <b-spinner label="Spinning" type="grow" v-if="isLoading"></b-spinner>
         <router-view></router-view>
     </b-col>
 </template>

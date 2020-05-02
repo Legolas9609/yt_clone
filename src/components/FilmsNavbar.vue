@@ -1,5 +1,5 @@
 <template>
-    <b-col class="p-lg-0 p-md-0 p-4" v-if="isLoading === false">
+    <b-col class="p-lg-0 p-md-0 p-4" v-show="isLoading === false">
         <b-col :key="`_film-${index}`"
                class="film-preview-holder p-0 mb-4 m-container"
                v-for="(_film, index) in films">
@@ -100,8 +100,6 @@
                 this.$router.push(`${publicPath}films/${id}`)
             },
             async loadFilms(id) {
-
-                this.isLoading = true;
 
                 await service.getAllFilms()
                     .then(response => {

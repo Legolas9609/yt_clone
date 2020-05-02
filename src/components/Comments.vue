@@ -1,5 +1,5 @@
 <template>
-    <b-col v-if="isLoading === false">
+    <b-col v-show="isLoading === false">
         <b-col class="p-0" cols="12" sm="12">
             <b-row class="p-0 m-0" cols="12" sm="12">
                 <b-col class="m-0 pl-0" cols="9" sm="10">
@@ -134,7 +134,6 @@
         },
         methods: {
             async getComments(filmId) {
-                this.isLoading = true;
                 await service.getAllCommentsByFilmId(filmId)
                     .then(response => {
                         this.comments = response.data;
