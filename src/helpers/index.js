@@ -55,13 +55,13 @@ export const buildSearchPath = (action, data, title_starts, filter, sort) => {
         } else
             sort.id = data.id
     }
-    let path = "title_starts=" + title_starts;
+    let query = {title_starts: title_starts};
     if (sort.id)
-        path += "&&" + sort.id + "=" + sort.dir.toString();
+        query[sort.id] = sort.dir.toString();
     if (filter)
-        path += "&&" + "filter=" + filter;
+        query.filter = filter;
 
-    return {path, filter, sort}
+    return {query, filter, sort}
 };
 
 export const authHeader = () => {

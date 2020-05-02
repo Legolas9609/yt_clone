@@ -88,7 +88,7 @@
                         <b-col class="p-0" cols="4" sm="8">
                             <b-row class="m-0">
                                 <b-col class="p-0 mb-1" cols="10" sm="10">
-                                    <span class="mb-0 title-search font-weight-bold">
+                                    <span class="mb-0 title-search font-weight-bold" v-line-clamp:20="2">
                                         {{film.title}}
                                     </span>
                                 </b-col>
@@ -99,7 +99,7 @@
                             </p>
 
                             <small>
-                                        <span class="mb-0 author-nick-search">
+                                        <span class="mb-0 author-nick-search" v-line-clamp:20="6">
                                            {{film.description}}
                                         </span>
                             </small>
