@@ -6,7 +6,7 @@
                    class="mb-4 film-preview-holder">
                 <div class="embed-responsive embed-responsive-16by9 z-depth-1-half container m-container"
                      @click="handleFilmChooseFilmsHomepage(film.id)">
-                    <b-img :alt="`Film added by ${film.authorUsername}`" :src="`${apiUrl}films/${film.id}/thumbnail/preview`" class="embed-responsive-item image pr-2"/>
+                    <b-img :alt="`Film added by ${film.authorUsername}`" :src="`${apiUrl}films/${film.id}/thumbnail`" class="embed-responsive-item image pr-2"/>
                     <font-awesome-icon icon="play"  class="middle"/>
                 </div>
                 <b-row class="m-0 mt-2">
