@@ -13,7 +13,8 @@
                 </md-button>
             </b-col>
         </b-row>
-        <b-dropdown-divider/>
+        <b-col class="mt-2 mb-3 dropdown-divider" cols="12"/>
+
 
         <b-col class="playlist-add-scroll" cols="12" sm="12"
                style="max-height: 100px; overflow-y: scroll">
@@ -55,7 +56,7 @@
             </div>
         </b-col>
 
-        <b-dropdown-divider/>
+        <b-col class="mt-2 mb-3 dropdown-divider" cols="12"/>
 
         <p class="dropdown-item-my pl-4 pr-4">Create a new playlist</p>
         <b-form-input
