@@ -59,7 +59,7 @@
             <b-col class="mb-2" lg="5" sm="6">
 
                 <b-col class="mb-3" sm="12">
-                    <b-input
+                    <b-form-input
                             aria-label="Title"
                             name="title"
                             placeholder="Title"

@@ -4,12 +4,79 @@ import VeeValidate from 'vee-validate'
 import lineClamp from 'vue-line-clamp'
 import ReadMore from 'vue-read-more';
 
-import { MdRipple, MdAvatar, MdButton, MdMenu, MdList } from 'vue-material/dist/components'
+import {MdAvatar, MdButton, MdList, MdMenu, MdRipple} from 'vue-material/dist/components'
 import 'vue-material/dist/vue-material.min.css'
 import './md_default.css'
 
-import { BCol, BRow, BContainer, BModal, BButton, BFormGroup, BForm, BFormInput, BFormTextarea,
-BCollapse, BDropdown, BAlert, BSpinner, BFormInvalidFeedback, BDropdownItem} from 'bootstrap-vue'
+import {
+    BAlert,
+    BButton,
+    BCol,
+    BCollapse,
+    BContainer,
+    BDropdown,
+    BDropdownItem,
+    BForm,
+    BFormGroup,
+    BFormInput,
+    BFormInvalidFeedback,
+    BFormTextarea,
+    BModal,
+    BNav,
+    BNavbar,
+    BNavbarBrand,
+    BNavbarToggle,
+    BNavItem,
+    BRow,
+    BSpinner,
+    VBToggle
+} from 'bootstrap-vue'
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {
+    faEllipsisV,
+    faEye,
+    faFilter,
+    faGlobe,
+    faLock,
+    faLockOpen,
+    faPlay,
+    faSearch,
+    faSortDown,
+    faSortUp,
+    faThumbsDown,
+    faThumbsUp,
+    faTimes,
+    faTrashAlt,
+    faWindowClose
+} from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+
+import App from "./App";
+import {router} from './routes';
+import 'v-autocomplete/dist/v-autocomplete.css'
+Vue.directive('b-toggle', VBToggle)
+Vue.component('b-nav', BNav);
+Vue.component('b-nav-item', BNavItem);
+Vue.component('b-navbar', BNavbar);
+Vue.component('b-navbar-toggle', BNavbarToggle);
+Vue.component('b-navbar-brand', BNavbarBrand);
+Vue.component('b-modal', BModal);
+Vue.component('b-col', BCol);
+Vue.component('b-row', BRow);
+Vue.component('b-container', BContainer);
+Vue.component('b-button', BButton);
+Vue.component('b-form-group', BFormGroup);
+Vue.component('b-form', BForm);
+Vue.component('b-form-input', BFormInput);
+Vue.component('b-form-textarea', BFormTextarea);
+Vue.component('b-collapse', BCollapse);
+Vue.component('b-dropdown', BDropdown);
+Vue.component('b-alert', BAlert);
+Vue.component('b-spinner', BSpinner);
+Vue.component('b-form-invalid-feedback', BFormInvalidFeedback);
+Vue.component('b-dropdown-item', BDropdownItem);
+
+/*
 
 Vue.use(BCol)
 Vue.use(BRow)
@@ -26,30 +93,7 @@ Vue.use(BAlert)
 Vue.use(BSpinner)
 Vue.use(BFormInvalidFeedback)
 Vue.use(BDropdownItem)
-
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {
-    faEllipsisV,
-    faEye,
-    faFilter,
-    faPlay,
-    faSearch,
-    faSortDown,
-    faSortUp,
-    faThumbsDown,
-    faThumbsUp,
-    faTimes,
-    faLock,
-    faLockOpen,
-    faGlobe,
-    faTrashAlt,
-    faWindowClose
-} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-
-import App from "./App";
-import {router} from './routes';
-import 'v-autocomplete/dist/v-autocomplete.css'
+*/
 
 library.add(faTimes);
 library.add(faPlay);
