@@ -8,49 +8,14 @@ import { MdRipple, MdAvatar, MdButton, MdMenu, MdList } from 'vue-material/dist/
 import 'vue-material/dist/vue-material.min.css'
 import './md_default.css'
 
-import {library} from '@fortawesome/fontawesome-svg-core'
-import {
-    faEllipsisV,
-    faEye,
-    faFilter,
-    faPlay,
-    faSearch,
-    faSortDown,
-    faSortUp,
-    faThumbsDown,
-    faThumbsUp,
-    faTimes,
-    faLock,
-    faLockOpen,
-    faGlobe,
-    faTrashAlt,
-    faWindowClose
-} from '@fortawesome/free-solid-svg-icons'
-import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
+import {BootstrapVue} from 'bootstrap-vue'
 
 import App from "./App";
 import {router} from './routes';
 import 'v-autocomplete/dist/v-autocomplete.css'
 
-library.add(faTimes);
-library.add(faPlay);
-library.add(faSearch);
-library.add(faThumbsUp);
-library.add(faThumbsDown);
-library.add(faEye);
-library.add(faSortUp);
-library.add(faSortDown);
-library.add(faFilter);
-library.add(faEllipsisV);
-library.add(faLock);
-library.add(faLockOpen);
-library.add(faGlobe);
-library.add(faTrashAlt);
-library.add(faWindowClose);
-
 Vue.config.productionTip = false;
 
-Vue.component('font-awesome-icon', FontAwesomeIcon);
 
 Vue.use(VeeValidate, {
     // This is the default
@@ -61,6 +26,7 @@ Vue.use(VeeValidate, {
     errorBagName: 'veeErrors'
 });
 
+Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(ReadMore);
 
