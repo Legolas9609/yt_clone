@@ -80,7 +80,6 @@ Vue.use(VeeValidate, {
     errorBagName: 'veeErrors'
 });
 
-Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 Vue.use(ReadMore);
 
