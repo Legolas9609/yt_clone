@@ -30,6 +30,7 @@ import {
     BSpinner,
     BFormCheckbox,
     BFormSelect,
+    ToastPlugin,
     VBToggle
 } from 'bootstrap-vue'
 import {library} from '@fortawesome/fontawesome-svg-core'
@@ -55,7 +56,11 @@ import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
 import App from "./App";
 import {router} from './routes';
 import 'v-autocomplete/dist/v-autocomplete.css'
-Vue.directive('b-toggle', VBToggle)
+
+Vue.use(ToastPlugin);
+
+Vue.directive('b-toggle', VBToggle);
+
 Vue.component('b-nav', BNav);
 Vue.component('b-nav-item', BNavItem);
 Vue.component('b-navbar', BNavbar);
