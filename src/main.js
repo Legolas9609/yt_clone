@@ -28,6 +28,8 @@ import {
     BNavItem,
     BRow,
     BSpinner,
+    BFormCheckbox,
+    BFormSelect,
     VBToggle
 } from 'bootstrap-vue'
 import {library} from '@fortawesome/fontawesome-svg-core'
@@ -73,6 +75,8 @@ Vue.component('b-alert', BAlert);
 Vue.component('b-spinner', BSpinner);
 Vue.component('b-form-invalid-feedback', BFormInvalidFeedback);
 Vue.component('b-dropdown-item', BDropdownItem);
+Vue.component('b-form-select', BFormSelect);
+Vue.component('b-form-checkbox', BFormCheckbox);
 
 library.add(faTimes);
 library.add(faPlay);

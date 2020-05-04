@@ -45,18 +45,21 @@
                     this.handleHide();
             });
         },
+        beforeDestroy() {
+            this.handleHide();
+        },
         methods: {
             handleScroll() {
                 this.isActive = false;
             },
             handleShow() {
-                console.log('show');
-                window.addEventListener('scroll', this.handleScroll)
+               // window.addEventListener('scroll', this.handleScroll);
+                setTimeout(() => document.body.classList.add('modal-open'), 250);
                 this.isActive = true;
             },
             handleHide() {
-                console.log('hide');
-                window.removeEventListener('scroll', this.handleScroll)
+                //window.removeEventListener('scroll', this.handleScroll);
+                document.body.classList.remove('modal-open')
                 this.isActive = false;
             },
         },
@@ -69,8 +72,12 @@
     }
 </script>
 
-<style scoped>
+<style >
     .md-menu-content {
         max-height: 50vh;
+    }
+
+    .modal-open {
+        overscroll-behavior: contain;
     }
 </style>
