@@ -75,6 +75,7 @@
 <style >
     .md-menu-content {
         max-height: 50vh;
+        z-index: 100;
     }
 
     .modal-open {

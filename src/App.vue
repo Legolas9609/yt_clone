@@ -122,5 +122,4 @@
         background-color: #212529 !important;
     }
 
-
 </style>
