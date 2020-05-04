@@ -17,7 +17,7 @@
 
 
         <b-col class="playlist-add-scroll" cols="12" sm="12"
-               style="max-height: 100px; overflow-y: scroll; height: 3rem">
+               style="max-height: 100px; overflow-y: scroll; min-height: 3rem">
             <b-col class="m-0 p-0"
                    v-if="isLoading === false">
                 <b-row :key="`_playlist-${index}`"
